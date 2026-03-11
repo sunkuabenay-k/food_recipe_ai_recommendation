@@ -5,6 +5,8 @@ package com.example.foodrecipe.di
 import com.example.foodrecipe.data.repository.UserRepositoryImpl
 import com.example.foodrecipe.domain.repository.RecipeRepository
 import com.example.foodrecipe.domain.repository.RecipeRepositoryImpl
+import com.example.foodrecipe.domain.repository.SavedRepository
+import com.example.foodrecipe.domain.repository.SavedRepositoryImpl
 import com.example.foodrecipe.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
@@ -27,4 +29,10 @@ abstract class RepositoryModule {
     abstract fun bindUserRepository(
         impl: UserRepositoryImpl
     ): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSavedRepository(
+        impl: SavedRepositoryImpl
+    ): SavedRepository
 }

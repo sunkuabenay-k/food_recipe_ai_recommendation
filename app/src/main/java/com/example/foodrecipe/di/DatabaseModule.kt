@@ -3,6 +3,7 @@ package com.example.foodrecipe.di
 import android.content.Context
 import androidx.room.Room
 import com.example.foodrecipe.data.local.dao.RecipeDao
+import com.example.foodrecipe.data.local.dao.SavedRecipeDao
 import com.example.foodrecipe.data.local.dao.UserDao
 import com.example.foodrecipe.data.local.db.RecipeDatabase
 import dagger.Module
@@ -41,5 +42,13 @@ object DatabaseModule {
         database: RecipeDatabase
     ): RecipeDao {
         return database.recipeDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSavedRecipeDao(
+        database: RecipeDatabase
+    ): SavedRecipeDao {
+        return database.savedRecipeDao()
     }
 }

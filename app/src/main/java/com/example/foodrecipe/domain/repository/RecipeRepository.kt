@@ -11,5 +11,6 @@ interface RecipeRepository {
 
     suspend fun refreshRecipes()
 
-    suspend fun getRecipeById(id: Int): Recipe?
+    fun getRecipeById(id: Int): Flow<ApiResult<Recipe>>
+
 }

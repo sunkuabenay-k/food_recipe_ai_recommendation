@@ -13,11 +13,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.*
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.foodrecipe.R
 import com.example.foodrecipe.ui.recipe.AddRecipeScreen
 import com.example.foodrecipe.ui.auth.ProfileScreen
 import com.example.foodrecipe.ui.home.HomeScreen
 import com.example.foodrecipe.ui.notification.NotificationScreen
+import com.example.foodrecipe.ui.recipe.RecipeDetailsScreen
 import com.example.foodrecipe.ui.saved.SavedScreen
 
 fun androidx.navigation.NavGraphBuilder.mainNavGraph(
@@ -176,11 +179,17 @@ fun MainScreen(
         ) {
 
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    onRecipeClick = { recipeId ->
+                            navController.navigate(
+                                Screen.RecipeDetails.createRoute(recipeId)
+                            )
+                    }
+                )
             }
 
             composable(Screen.Save.route) {
-                SavedScreen()
+                SavedScreen(navController=navController)
             }
 
             composable(Screen.Add.route) {
@@ -202,6 +211,21 @@ fun MainScreen(
                     }
                 )
             }
+
+            composable(
+                route = Screen.RecipeDetails.route,
+                arguments = listOf(
+                    navArgument("id"){type = NavType.IntType}
+                )
+            ){
+                backStackEntry ->
+
+                val recipeId = backStackEntry.arguments?.getInt("id") ?: 0
+                RecipeDetailsScreen(recipeId = recipeId,
+                    onBackClick = {navController.popBackStack()})
+            }
+
+
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.foodrecipe.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,12 +35,14 @@ import com.example.foodrecipe.domain.model.Recipe
 
 @Composable
 fun NewRecipeCard(
-    recipe: Recipe
+    recipe: Recipe,
+    onClick: () -> Unit
 ) {
 
     Card(
         shape = RoundedCornerShape(20.dp),
         modifier = Modifier.fillMaxWidth()
+            .clickable { onClick() }
     ) {
 
         Row(

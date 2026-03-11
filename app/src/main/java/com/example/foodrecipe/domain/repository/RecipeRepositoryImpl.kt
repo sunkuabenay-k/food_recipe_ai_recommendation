@@ -60,7 +60,39 @@ class RecipeRepositoryImpl @Inject constructor(
         recipeDao.insertAll(entities)
     }
 
-    override suspend fun getRecipeById(id: Int): Recipe? {
-        return recipeDao.getById(id)?.toDomain()
+    override fun getRecipeById(id: Int): Flow<ApiResult<Recipe>> = flow {
+
+        emit(ApiResult.Loading)
+
+        try {
+
+            // 1️⃣ Try local first
+            val localRecipe = recipeDao.getById(id)
+
+            if (localRecipe != null) {
+                emit(ApiResult.Success(localRecipe.toDomain()))
+            }
+
+            // 2️⃣ Fetch from API
+            val remoteRecipe = api.getRecipeById(id)
+
+            val entity = remoteRecipe.toEntity()
+
+            // 3️⃣ Cache it
+            recipeDao.insert(entity)
+
+            emit(ApiResult.Success(entity.toDomain()))
+
+        } catch (e: Exception) {
+
+            val localRecipe = recipeDao.getById(id)
+
+            if (localRecipe != null) {
+                emit(ApiResult.Success(localRecipe.toDomain()))
+            } else {
+                emit(ErrorMapper.map(e))
+            }
+        }
     }
+
 }
