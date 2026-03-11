@@ -13,12 +13,12 @@ import androidx.room.ForeignKey
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
         ),
-        ForeignKey(
-            entity = RecipeEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["recipeId"],
-            onDelete = ForeignKey.CASCADE
-        )
+//        ForeignKey(
+//            entity = RecipeEntity::class,
+//            parentColumns = ["id"],
+//            childColumns = ["recipeId"],
+//            onDelete = ForeignKey.CASCADE
+//        )
     ]
 )
 data class SavedRecipeEntity(

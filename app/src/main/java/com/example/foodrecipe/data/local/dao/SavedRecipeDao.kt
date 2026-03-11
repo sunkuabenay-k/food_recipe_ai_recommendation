@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.foodrecipe.data.local.entity.RecipeEntity
 import com.example.foodrecipe.data.local.entity.SavedRecipeEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SavedRecipeDao {
@@ -14,10 +15,11 @@ interface SavedRecipeDao {
     suspend fun save(savedRecipe: SavedRecipeEntity)
 
     @Query("""
-        DELETE FROM saved_recipes 
+        DELETE FROM saved_recipes
         WHERE userId = :userId AND recipeId = :recipeId
     """)
     suspend fun unsave(userId: String, recipeId: Int)
+
 
     @Query("""
         SELECT EXISTS(
@@ -25,7 +27,11 @@ interface SavedRecipeDao {
             WHERE userId = :userId AND recipeId = :recipeId
         )
     """)
-    suspend fun isSaved(userId: String, recipeId: Int): Boolean
+    fun observeIsSaved(
+        userId: String,
+        recipeId: Int
+    ): Flow<Boolean>
+
 
     @Query("""
         SELECT r.* FROM recipes r
@@ -34,7 +40,10 @@ interface SavedRecipeDao {
         WHERE s.userId = :userId
         ORDER BY s.savedAt DESC
     """)
-    suspend fun getSavedRecipes(userId: String): List<RecipeEntity>
+    fun observeSavedRecipes(
+        userId: String
+    ): Flow<List<RecipeEntity>>
+
 
     @Query("DELETE FROM saved_recipes WHERE userId = :userId")
     suspend fun clearUserSaved(userId: String)

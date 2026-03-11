@@ -22,7 +22,7 @@ import com.example.foodrecipe.data.local.entity.UserEntity
         HistoryEntity::class,
         NotificationEntity::class
     ],
-    version = 1,
+    version = 3,
     exportSchema = true
 )
 @TypeConverters(Converters::class)

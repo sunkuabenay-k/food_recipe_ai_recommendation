@@ -29,49 +29,63 @@ import kotlin.collections.take
 
 @Composable
 fun HomeContent(
-    recipes: List<Recipe>
+    recipes: List<Recipe>,
+    onRecipeClick: (Int) -> Unit
 ) {
-    Column(
+    // Use ONE LazyColumn for the whole screen
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 16.dp)
+            .padding(top = 16.dp),
+        contentPadding = PaddingValues(bottom = 16.dp)
     ) {
 
-        Text(
-            text = "Popular Recipes",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            items(recipes) { recipe ->
-                HorizontalRecipeCard(recipe = recipe)
-            }
+        // 1. Header: Popular Recipes
+        item {
+            Text(
+                text = "Popular Recipes",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        // 2. Horizontal Scroll (Nest LazyRow inside item)
+        item {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(24.dp)
+            ) {
+                items(recipes) { recipe ->
+                    HorizontalRecipeCard(
+                        recipe = recipe,
+                        onClick = { onRecipeClick(recipe.id) }
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+        }
 
-        Text(
-            text = "New Recipes",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        // 3. Header: New Recipes
+        item {
+            Text(
+                text = "New Recipes",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        LazyColumn(
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(recipes.take(5)) { recipe ->
-                NewRecipeCard(recipe = recipe)
+        // 4. Vertical List Items
+        // Note: items() here is part of the parent LazyColumn
+        items(recipes.take(5)) { recipe ->
+            Box(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+                NewRecipeCard(
+                    recipe = recipe,
+                    onClick = { onRecipeClick(recipe.id) }
+                )
             }
         }
     }

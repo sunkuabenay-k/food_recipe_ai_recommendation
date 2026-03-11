@@ -1,5 +1,6 @@
 package com.example.foodrecipe.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,7 +41,8 @@ import com.example.foodrecipe.domain.model.Recipe
 
 @Composable
 fun HorizontalRecipeCard(
-    recipe: Recipe
+    recipe: Recipe,
+    onClick: () -> Unit
 ) {
 
     Box(
@@ -57,7 +59,8 @@ fun HorizontalRecipeCard(
                 .fillMaxHeight()
 //                .height(180.dp)
                 .align(Alignment.BottomCenter)
-                .padding(top = 70.dp),
+                .padding(top = 70.dp)
+                .clickable { onClick() },
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Color(0xFFF4F4F4),
